@@ -1,50 +1,35 @@
-# Welcome to your Expo app 👋
+# ChatBot Personalizado con React, APIs y Frameworks
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Descripción del Proyecto
 
-## Get started
+Este proyecto es una aplicación de chatbot personalizada inspirada en ChatGPT. La aplicación está desarrollada utilizando React junto con diversas APIs y frameworks, con el objetivo de ofrecer una experiencia conversacional única con un estilo propio.
 
-1. Install dependencies
+## Características Principales
 
-   ```bash
-   npm install
-   ```
+Interfaz moderna y personalizable
 
-2. Start the app
+Uso de APIs para procesamiento de lenguaje natural
 
-   ```bash
-    npx expo start
-   ```
+Frameworks avanzados para mejorar la experiencia de usuario
 
-In the output, you'll find options to open the app in a
+Desarrollado en React para una aplicación web dinámica y eficiente
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Tecnologías Utilizadas
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+React para la interfaz de usuario
 
-## Get a fresh project
+APIs de inteligencia artificial para el procesamiento del lenguaje
 
-When you're ready, run:
+Frameworks modernos para mejorar la funcionalidad
 
-```bash
-npm run reset-project
-```
+# Contexto Académico
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Este proyecto forma parte de la asignatura Desarrollo Móvil en la Universidad de La Sabana. Su objetivo es aplicar conceptos avanzados en el desarrollo de aplicaciones interactivas y funcionales.
 
-## Learn more
+# Contribución
 
-To learn more about developing your project with Expo, look at the following resources:
+Si deseas contribuir a este proyecto, siéntete libre de realizar un fork y enviar tus propuestas mediante pull requests.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Autor
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Daniel Forero, estudiante de la Universidad de La SabanaClase: Desarrollo Móvil
