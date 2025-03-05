@@ -1,23 +1,59 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 
 const ChatScreen = () => {
+  const [message, setMessage] = useState(""); // Mensaje del usuario
+  const [response, setResponse] = useState("Hola, ¿en qué puedo ayudarte?"); // Respuesta del chat
+  const [isLoading, setIsLoading] = useState(false); // Indicador de carga
+
+  // Función para hacer la petición a la API
+  const getResponse = async () => {
+    if (!message.trim()) return; // Evita enviar mensajes vacíos
+    setIsLoading(true);
+    try {
+      const res = await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyB5r43GOrHkHmU7Bg6RF31QCMwikxow82I",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: message }] }],
+          }),
+        }
+      );
+
+      const data = await res.json();
+      const aiResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No recibí respuesta.";
+      setResponse(aiResponse);
+    } catch (error) {
+      console.error("Error:", error);
+      setResponse("Ocurrió un error al obtener la respuesta.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.title}>Chat</Text>
         <View style={styles.chatBox}>
-          <Text style={styles.message}>Hola, ¿en qué puedo ayudarte?</Text>
+          <Text style={styles.message}>{response}</Text>
         </View>
-        <TextInput style={styles.input} placeholder="Escribe tu mensaje..." placeholderTextColor="#aaa" />
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Enviar</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Escribe tu mensaje..."
+          placeholderTextColor="#aaa"
+          value={message}
+          onChangeText={setMessage}
+        />
+        <TouchableOpacity style={styles.button} onPress={getResponse} disabled={isLoading}>
+          <Text style={styles.buttonText}>{isLoading ? "Cargando..." : "Enviar"}</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
