@@ -17,7 +17,7 @@ export default function Index() {
         Welcome
       </Text>
 
-      <Button title="Next" onPress={() => router.push("/chat")} />
+      <Button title="Welcome" onPress={() => router.push("/welcome")} />
     </View>
   );
 }
