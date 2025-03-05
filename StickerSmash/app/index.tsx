@@ -12,8 +12,9 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      
-<text> </text>
+
+      <Button
+        title="Screens"/>
     </View>
   );
 }

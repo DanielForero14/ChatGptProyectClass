@@ -4,7 +4,7 @@ import React from 'react'
 export default function Page() {
   return (
     <View>
-      <Text>splashscreen</Text>
+      <Text>holamundo</Text>
     </View>
   )
 }
