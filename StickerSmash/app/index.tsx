@@ -14,7 +14,7 @@ export default function Index() {
     >
 
       <Button
-        title="Screens"/>
+        title="aguacater"/>
     </View>
   );
 }
