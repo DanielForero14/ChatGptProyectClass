@@ -1,15 +1,32 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 
 const ChatScreen = () => {
   const [message, setMessage] = useState(""); // Mensaje del usuario
-  const [response, setResponse] = useState("Hola, ¿en qué puedo ayudarte?"); // Respuesta del chat
+  const [messages, setMessages] = useState([
+    { text: "Hola, ¿en qué puedo ayudarte?", sender: "bot" },
+  ]); // Historial de mensajes
   const [isLoading, setIsLoading] = useState(false); // Indicador de carga
 
   // Función para hacer la petición a la API
   const getResponse = async () => {
     if (!message.trim()) return; // Evita enviar mensajes vacíos
+
+    // Agregar mensaje del usuario al historial
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { text: message, sender: "user" },
+    ]);
+    setMessage(""); // Limpiar la barra de entrada
     setIsLoading(true);
+
     try {
       const res = await fetch(
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyB5r43GOrHkHmU7Bg6RF31QCMwikxow82I",
@@ -23,11 +40,21 @@ const ChatScreen = () => {
       );
 
       const data = await res.json();
-      const aiResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No recibí respuesta.";
-      setResponse(aiResponse);
+      const aiResponse =
+        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "No recibí respuesta.";
+
+      // Agregar respuesta del chatbot al historial
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: aiResponse, sender: "bot" },
+      ]);
     } catch (error) {
       console.error("Error:", error);
-      setResponse("Ocurrió un error al obtener la respuesta.");
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { text: "Ocurrió un error al obtener la respuesta.", sender: "bot" },
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -38,7 +65,19 @@ const ChatScreen = () => {
       <View style={styles.content}>
         <Text style={styles.title}>Chat</Text>
         <View style={styles.chatBox}>
-          <Text style={styles.message}>{response}</Text>
+          <ScrollView style={styles.scrollView}>
+            {messages.map((msg, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.messageContainer,
+                  msg.sender === "user" ? styles.userMessage : styles.botMessage,
+                ]}
+              >
+                <Text style={styles.messageText}>{msg.text}</Text>
+              </View>
+            ))}
+          </ScrollView>
         </View>
         <TextInput
           style={styles.input}
@@ -47,13 +86,20 @@ const ChatScreen = () => {
           value={message}
           onChangeText={setMessage}
         />
-        <TouchableOpacity style={styles.button} onPress={getResponse} disabled={isLoading}>
-          <Text style={styles.buttonText}>{isLoading ? "Cargando..." : "Enviar"}</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={getResponse}
+          disabled={isLoading}
+        >
+          <Text style={styles.buttonText}>
+            {isLoading ? "Cargando..." : "Enviar"}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -63,7 +109,7 @@ const styles = StyleSheet.create({
   },
   content: {
     width: "90%", // Margen en los lados
-    maxWidth: 400, // Limitar el ancho para que no se expanda demasiado
+    maxWidth: 700, // Limitar el ancho para que no se expanda demasiado
     alignItems: "center",
   },
   title: {
@@ -75,14 +121,31 @@ const styles = StyleSheet.create({
   },
   chatBox: {
     backgroundColor: "#333",
-    padding: 15,
     borderRadius: 10,
     width: "100%",
     minHeight: 300,
-    justifyContent: "flex-end",
-    marginBottom: 20,
+    maxHeight: 600, // Evita que crezca demasiado
+    padding: 10,
+    paddingBottom: 20, 
   },
-  message: {
+  scrollView: {
+    flexGrow: 1,
+  },
+  messageContainer: {
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 5,
+    maxWidth: "80%",
+  },
+  userMessage: {
+    alignSelf: "flex-end",
+    backgroundColor: "#00b894",
+  },
+  botMessage: {
+    alignSelf: "flex-start",
+    backgroundColor: "#444",
+  },
+  messageText: {
     color: "white",
     fontSize: 16,
   },
@@ -92,8 +155,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     width: "100%",
-    marginBottom: 10,
+    marginBottom: 10, // Agregar espacio entre el input y el botón
   },
+  
   button: {
     backgroundColor: "#00b894",
     padding: 15,
