@@ -7,23 +7,23 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
+import { Message } from "../interfaces/Appinterfaces";
+import { APIResponse } from "../interfaces/Responses";
 
-const ChatScreen = () => {
-  const [message, setMessage] = useState(""); // Mensaje del usuario
-  const [messages, setMessages] = useState([
-    { text: "Hola, ¿en qué puedo ayudarte?", sender: "bot" },
+const ChatScreen: React.FC = () => {
+  const [message, setMessage] = useState<string>(""); // Mensaje del usuario
+  const [messages, setMessages] = useState<Message[]>([
+    { text: "Hola, ¿en qué puedo ayudarte?", sender_by: "Bot", date: new Date(), state: "received" },
   ]); // Historial de mensajes
-  const [isLoading, setIsLoading] = useState(false); // Indicador de carga
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Indicador de carga
 
   // Función para hacer la petición a la API
   const getResponse = async () => {
     if (!message.trim()) return; // Evita enviar mensajes vacíos
 
     // Agregar mensaje del usuario al historial
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { text: message, sender: "user" },
-    ]);
+    const newMessage: Message = { text: message, sender_by: "Me", date: new Date(), state: "viewed" };
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
     setMessage(""); // Limpiar la barra de entrada
     setIsLoading(true);
 
@@ -39,21 +39,18 @@ const ChatScreen = () => {
         }
       );
 
-      const data = await res.json();
+      const data: APIResponse = await res.json();
       const aiResponse =
-        data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-        "No recibí respuesta.";
+        data?.candidates?.[0]?.content?.parts?.[0]?.text || "No recibí respuesta.";
 
       // Agregar respuesta del chatbot al historial
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { text: aiResponse, sender: "bot" },
-      ]);
+      const botMessage: Message = { text: aiResponse, sender_by: "Bot", date: new Date(), state: "received" };
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
       console.error("Error:", error);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { text: "Ocurrió un error al obtener la respuesta.", sender: "bot" },
+        { text: "Ocurrió un error al obtener la respuesta.", sender_by: "Bot", date: new Date(), state: "received" },
       ]);
     } finally {
       setIsLoading(false);
@@ -71,7 +68,7 @@ const ChatScreen = () => {
                 key={index}
                 style={[
                   styles.messageContainer,
-                  msg.sender === "user" ? styles.userMessage : styles.botMessage,
+                  msg.sender_by === "Me" ? styles.userMessage : styles.botMessage,
                 ]}
               >
                 <Text style={styles.messageText}>{msg.text}</Text>
@@ -103,13 +100,13 @@ const ChatScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1E1E1E", // Fondo oscuro
+    backgroundColor: "#1E1E1E",
     justifyContent: "center",
     alignItems: "center",
   },
   content: {
-    width: "90%", // Margen en los lados
-    maxWidth: 700, // Limitar el ancho para que no se expanda demasiado
+    width: "90%",
+    maxWidth: 700,
     alignItems: "center",
   },
   title: {
@@ -124,9 +121,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "100%",
     minHeight: 300,
-    maxHeight: 600, // Evita que crezca demasiado
+    maxHeight: 600,
     padding: 10,
-    paddingBottom: 20, 
+    paddingBottom: 20,
   },
   scrollView: {
     flexGrow: 1,
@@ -155,9 +152,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     width: "100%",
-    marginBottom: 10, // Agregar espacio entre el input y el botón
+    marginBottom: 10,
   },
-  
   button: {
     backgroundColor: "#00b894",
     padding: 15,
