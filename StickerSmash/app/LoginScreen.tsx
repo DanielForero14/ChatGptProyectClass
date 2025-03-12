@@ -13,7 +13,7 @@ const LoginScreen = () => {
   const handleRegister = async () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      router.push("/chat");
+      router.push("/welcome");
     } catch (error: any) {
       console.log("Error de registro", error.message);
     }
@@ -23,7 +23,7 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/chat");
+      router.push("/welcome");
     } catch (error: any) {
       console.log("Error de inicio de sesión", error.message);
     }
