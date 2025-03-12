@@ -1,4 +1,4 @@
-import { db_instance } from "../Utils/FirebaseConfig";
+import { db_instance } from "./FirebaseConfig";
 import { collection, addDoc, getDocs, doc, setDoc } from "firebase/firestore";
 
 // Guardar datos del usuario en Firestore
