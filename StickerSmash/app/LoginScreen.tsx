@@ -12,9 +12,11 @@ const LoginScreen = () => {
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert("¡Éxito!", "Has iniciado sesión correctamente.");
     } catch (error) {
-      Alert.alert("Error", error.message);
+      console.error(error);  // <-- Agregar esto para ver el error en consola
+      Alert.alert("Error", "Hubo un problema con el inicio de sesión."); // Mensaje genérico
     }
   };
+  
 
   return (
     <View style={styles.container}>
