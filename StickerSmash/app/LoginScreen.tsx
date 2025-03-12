@@ -31,32 +31,34 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesión</Text>
+      <View style={styles.card}>
+        <Text style={styles.title}>Iniciar Sesión</Text>
 
-      <TextInput
-        placeholder="Correo electrónico"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        placeholderTextColor="#ccc"
-      />
-      
-      <TextInput
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-        placeholderTextColor="#ccc"
-      />
+        <TextInput
+          placeholder="Correo electrónico"
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+          placeholderTextColor="#ccc"
+        />
+        
+        <TextInput
+          placeholder="Contraseña"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.input}
+          placeholderTextColor="#ccc"
+        />
 
-      <TouchableOpacity onPress={handleLogin} style={styles.button}>
-        <Text style={styles.buttonText}>Iniciar Sesión</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={handleLogin} style={styles.button}>
+          <Text style={styles.buttonText}>Iniciar Sesión</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={handleRegister} style={styles.button}>
-        <Text style={styles.buttonText}>Registrarse</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={handleRegister} style={styles.buttonSecondary}>
+          <Text style={styles.buttonText}>Registrarse</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -65,13 +67,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#1E1E1E",
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
     padding: 20,
+  },
+  card: {
+    backgroundColor: "#2A2A2A",
+    padding: 20,
+    borderRadius: 12,
+    width: "90%",
+    maxWidth: 400,
+    alignItems: "center",
   },
   title: {
     color: "white",
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 20,
@@ -80,17 +90,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#444",
     color: "white",
     padding: 12,
-    borderRadius: 10,
+    borderRadius: 8,
     width: "100%",
-    maxWidth: 400,
-    marginBottom: 10,
+    marginBottom: 12,
   },
   button: {
     backgroundColor: "#00b894",
-    padding: 15,
-    borderRadius: 10,
+    padding: 14,
+    borderRadius: 8,
     width: "100%",
-    maxWidth: 400,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  buttonSecondary: {
+    backgroundColor: "#0984e3",
+    padding: 14,
+    borderRadius: 8,
+    width: "100%",
     alignItems: "center",
     marginTop: 10,
   },
