@@ -7,24 +7,26 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
+import { useRouter } from "expo-router";
 import { Message } from "../interfaces/Appinterfaces";
 import { APIResponse } from "../interfaces/Responses";
 
 const ChatScreen: React.FC = () => {
-  const [message, setMessage] = useState<string>(""); // Mensaje del usuario
+  const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([
     { text: "Hola, ¿en qué puedo ayudarte?", sender_by: "Bot", date: new Date(), state: "received" },
-  ]); // Historial de mensajes
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Indicador de carga
+  ]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   // Función para hacer la petición a la API
   const getResponse = async () => {
-    if (!message.trim()) return; // Evita enviar mensajes vacíos
+    if (!message.trim()) return;
 
-    // Agregar mensaje del usuario al historial
     const newMessage: Message = { text: message, sender_by: "Me", date: new Date(), state: "viewed" };
     setMessages((prevMessages) => [...prevMessages, newMessage]);
-    setMessage(""); // Limpiar la barra de entrada
+    setMessage("");
     setIsLoading(true);
 
     try {
@@ -43,7 +45,6 @@ const ChatScreen: React.FC = () => {
       const aiResponse =
         data?.candidates?.[0]?.content?.parts?.[0]?.text || "No recibí respuesta.";
 
-      // Agregar respuesta del chatbot al historial
       const botMessage: Message = { text: aiResponse, sender_by: "Bot", date: new Date(), state: "received" };
       setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
@@ -59,6 +60,26 @@ const ChatScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      {/* Botón del menú desplegable */}
+      <TouchableOpacity onPress={() => setMenuOpen(!menuOpen)} style={styles.menuButton}>
+        <Text style={styles.menuButtonText}>☰</Text>
+      </TouchableOpacity>
+
+      {/* Menú desplegable */}
+      {menuOpen && (
+        <View style={styles.menu}>
+          <TouchableOpacity onPress={() => router.replace("/welcome")} style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Volver al inicio</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => alert("Seleccionaste Chat 1")} style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Chat 1</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => alert("Seleccionaste Chat 2")} style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Chat 2</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       <View style={styles.content}>
         <Text style={styles.title}>Chat</Text>
         <View style={styles.chatBox}>
@@ -101,8 +122,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#1E1E1E",
-    justifyContent: "center",
     alignItems: "center",
+    paddingTop: 40,
+  },
+  menuButton: {
+    position: "absolute",
+    top: 10,
+    left: 20,
+    zIndex: 10,
+    padding: 10,
+  },
+  menuButtonText: {
+    fontSize: 24,
+    color: "white",
+  },
+  menu: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    backgroundColor: "#333",
+    padding: 10,
+    borderRadius: 5,
+    zIndex: 10,
+    width: 200,
+  },
+  menuItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#555",
+  },
+  menuItemText: {
+    color: "white",
   },
   content: {
     width: "90%",
