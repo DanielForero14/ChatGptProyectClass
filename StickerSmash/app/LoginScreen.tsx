@@ -1,39 +1,66 @@
-import { useState } from "react";
-import { View, Text, TextInput, Button, Alert } from "react-native";
-import { useRouter } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState } from "react";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Services/FirebaseConfig"; // Importa la configuración de Firebase
+import { useRouter } from "expo-router"; // ✅ Usa expo-router en lugar de react-navigation
 
-export default function LoginScreen() {
-  const router = useRouter();
-  const [username, setUsername] = useState("");
+const LoginScreen = () => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter(); // ✅ Usa useRouter
 
+  // Registrar nuevo usuario
+  const handleRegister = async () => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      console.log("Registro exitoso");
+      router.push("/chat"); // ✅ Redirige al chat
+    } catch (error: any) {
+      console.error("Error:", error.message);
+    }
+  };
+
+  // Iniciar sesión
   const handleLogin = async () => {
-    if (username === "admin" && password === "1234") {
-      await AsyncStorage.setItem("userToken", "loggedIn"); // Guardar sesión
-      router.replace("/welcome"); // Redirigir a Welcome
-    } else {
-      Alert.alert("Error", "Usuario o contraseña incorrectos");
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("Inicio de sesión exitoso");
+      router.push("/chat"); // ✅ Redirige al chat
+    } catch (error: any) {
+      console.error("Error:", error.message);
     }
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Iniciar Sesión</Text>
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 24, textAlign: "center", marginBottom: 20 }}>Iniciar Sesión</Text>
+
       <TextInput
-        placeholder="Usuario"
-        value={username}
-        onChangeText={setUsername}
-        style={{ borderWidth: 1, width: 200, marginVertical: 10, padding: 5 }}
+        placeholder="Correo electrónico"
+        value={email}
+        onChangeText={setEmail}
+        style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
       />
+      
       <TextInput
         placeholder="Contraseña"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        style={{ borderWidth: 1, width: 200, marginVertical: 10, padding: 5 }}
+        style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
       />
-      <Button title="Ingresar" onPress={handleLogin} />
+
+      {/* Botón de Iniciar Sesión */}
+      <TouchableOpacity onPress={handleLogin} style={{ backgroundColor: "blue", padding: 10, alignItems: "center", marginBottom: 10 }}>
+        <Text style={{ color: "white" }}>Iniciar Sesión</Text>
+      </TouchableOpacity>
+
+      {/* Botón de Registro */}
+      <TouchableOpacity onPress={handleRegister} style={{ backgroundColor: "green", padding: 10, alignItems: "center" }}>
+        <Text style={{ color: "white" }}>Registrarse</Text>
+      </TouchableOpacity>
     </View>
   );
-}
+};
+
+export default LoginScreen;
