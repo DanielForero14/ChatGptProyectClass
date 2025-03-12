@@ -1,10 +1,11 @@
-import { db_instance } from "./FirebaseConfig";
+import { db } from "./FirebaseConfig";
+
 import { collection, addDoc, getDocs, doc, setDoc } from "firebase/firestore";
 
 // Guardar datos del usuario en Firestore
 export async function saveUser(userId: string, name: string, email: string, photoURL: string) {
     try {
-        const userRef = doc(db_instance, "Users", userId);
+        const userRef = doc(db, "Users", userId);
         await setDoc(userRef, {
             id: userId,
             name,
@@ -25,7 +26,7 @@ export async function saveUser(userId: string, name: string, email: string, phot
 // Obtener todos los chats
 export async function getChats() {
     try {
-        const chatsRef = collection(db_instance, "Chats");
+        const chatsRef = collection(db, "Chats");
         const snapshot = await getDocs(chatsRef);
         return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     } catch (error) {
@@ -37,7 +38,7 @@ export async function getChats() {
 // Crear un nuevo chat
 export async function createChat(userId: string, message: string) {
     try {
-        const chatRef = collection(db_instance, "Chats");
+        const chatRef = collection(db, "Chats");
         await addDoc(chatRef, {
             userId,
             messages: [{ text: message, senderId: userId, timestamp: new Date() }],
