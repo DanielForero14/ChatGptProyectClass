@@ -1,13 +1,11 @@
-import { Stack } from "expo-router";
+import React from "react";
+import { ChatProvider } from "../Services/Datacontext";
 
-export default function RootLayout() {
+
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false, // Oculta los headers por defecto
-      }}
-    />
+    <ChatProvider>
+      {children}
+    </ChatProvider>
   );
 }
-
-
