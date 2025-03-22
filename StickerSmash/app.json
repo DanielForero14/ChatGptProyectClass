@@ -1,5 +1,10 @@
 {
   "expo": {
+    "splash": {
+    "image": "./assets/images/LogoChatGPT.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#202123"
+  },
     "name": "MiProyectoExpo",
     "slug": "MiProyectoExpo",
     "version": "1.0.0",
