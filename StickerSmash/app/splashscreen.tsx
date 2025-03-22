@@ -1,34 +1,50 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { View, Image, StyleSheet } from "react-native";
-import * as splashScreen from "expo-splash-screen";
+import * as SplashScreen from "expo-splash-screen";
 
 export default function HomeScreen({ navigation }: { navigation: any }) {
+  const [appIsReady, setAppIsReady] = useState(false);
+
   useEffect(() => {
-    const hideSplash = async () => {
-      await splashScreen.preventAutoHideAsync(); 
-      await splashScreen.hideAsync(); 
+    const prepareApp = async () => {
+      try {
+        await SplashScreen.preventAutoHideAsync(); // Evita que la splash screen se cierre antes de tiempo
+        // Simular una carga de la app (ej. cargar datos, verificar sesión, etc.)
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        setAppIsReady(true);
+      } catch (e) {
+        console.warn(e);
+      }
     };
 
-    hideSplash();
+    prepareApp();
   }, []);
+
+  useEffect(() => {
+    if (appIsReady) {
+      SplashScreen.hideAsync(); // Ocultar splash screen solo cuando la app esté lista
+    }
+  }, [appIsReady]);
+
   return (
     <View style={styles.container}>
-      <Image                                                       // Contiene la ruta del logo, y modo en el que se coloca la imagen
-        source={require("../assets/images/LogoChatGPT.png")} 
+      <Image
+        source={require("../assets/images/LogoChatGPT.png")}
         style={styles.logo}
-        resizeMode="contain"/> 
-    </View> 
+        resizeMode="contain"
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#202123", // Fondo 
-    alignItems: "center", // Ubicación
+    backgroundColor: "#202123",
+    alignItems: "center",
     justifyContent: "center",
   },
-  logo: { // Tamaño del logo
+  logo: {
     width: 250,
     height: 250,
   },
