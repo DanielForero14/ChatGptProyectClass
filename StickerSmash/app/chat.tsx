@@ -67,7 +67,7 @@ const ChatScreen: React.FC = () => {
 
       {/* Menú desplegable */}
       {menuOpen && (
-        <View style={styles.menu}>
+      <View style={styles.menu}>
           <TouchableOpacity onPress={() => router.replace("/welcome")} style={styles.menuItem}>
             <Text style={styles.menuItemText}>Volver al inicio</Text>
           </TouchableOpacity>
@@ -76,8 +76,8 @@ const ChatScreen: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => alert("Seleccionaste Chat 2")} style={styles.menuItem}>
             <Text style={styles.menuItemText}>Chat 2</Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
+      </View>
       )}
 
       <View style={styles.content}>
