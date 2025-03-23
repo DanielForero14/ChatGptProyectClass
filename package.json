@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "expo-splash-screen": "^0.29.22"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/react": "~18.3.12"
+  }
+}
