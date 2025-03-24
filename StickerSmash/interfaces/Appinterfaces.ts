@@ -6,6 +6,12 @@ export interface Candidate {
     citationMetadata: CitationMetadata;
     avgLogprobs: number;
 }
+export interface Message {
+    sender_by: string; // Cambia a sender si es necesario
+    text: string;
+    date: Date; // O Timestamp si usas Firebase
+    state: string; // Por ejemplo: "viewed", "received"
+  }
 
 export interface CitationMetadata {
     citationSources: CitationSource[];
@@ -39,9 +45,3 @@ export interface TokensDetail {
     tokenCount: number;
 }
 
-export interface Message {
-    text: string,
-    sender_by: "Bot" | "Me",
-    date: Date,
-    state: "received" | "viewed",
-}

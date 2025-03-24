@@ -1,53 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { View, Image, StyleSheet } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 
-SplashScreen.preventAutoHideAsync();
-
-const SplashScreenComponent = ({ navigation }: any) => {
-  const [isReady, setIsReady] = useState(false);
-
+export default function SplashScreenComponent({ onFinish }: { onFinish: () => void }) {
   useEffect(() => {
-    console.log("Cargando splash screen...");
-    const loadAssets = async () => {
+    const prepare = async () => {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        console.log("Finalizando splash screen");
+        // Evita que la Splash Screen se oculte automáticamente
+        await SplashScreen.preventAutoHideAsync();
+
+        // Simula una carga de 10 segundos
+        await new Promise((resolve) => setTimeout(resolve, 10000));
       } catch (e) {
         console.warn(e);
       } finally {
-        setIsReady(true);
-        SplashScreen.hideAsync().catch(console.warn);
-        navigation.replace("Welcome");
+        // Oculta la Splash Screen después de 10 segundos
+        await SplashScreen.hideAsync();
+
+        // Notifica que la Splash Screen ha terminado
+        onFinish();
       }
     };
-  
-    loadAssets();
-  }, [navigation]);
 
-  if (!isReady) {
-    return (
-      <View style={styles.container}>
-        <Image source={require("../assets/images/LogoChatGPT.png")} style={styles.logo} />
-      </View>
-    );
-  }
+    prepare();
+  }, []);
 
-  return null; // Esto previene pantalla en blanco
-};
+  return (
+    <View style={styles.container}>
+      <Image
+        source={require("../assets/images/LogoChatGPT.png")}
+        style={styles.logo}
+        resizeMode="contain"
+      />
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    backgroundColor: "#202123",
     alignItems: "center",
-    backgroundColor: "#ffffff",
+    justifyContent: "center",
   },
   logo: {
-    width: 2000,
-    height: 2000,
-    resizeMode: "contain",
+    width: 250,
+    height: 250,
   },
 });
-
-export default SplashScreenComponent;
