@@ -16,7 +16,7 @@ export const createChat = async () => {
   } catch (error) {
     console.error("Error al crear el chat:", error);
   }
-};
+};  
 
 // 🔹 Obtener la lista de chats en tiempo real
 export const listenToChats = (callback: (chats: any[]) => void) => {

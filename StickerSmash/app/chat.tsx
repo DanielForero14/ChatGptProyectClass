@@ -20,7 +20,7 @@ const ChatScreen: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const router = useRouter();
 
-  // Función para hacer la petición a la API
+  // Función para obtener la respuesta de la API
   const getResponse = async () => {
     if (!message.trim()) return;
 
@@ -58,6 +58,14 @@ const ChatScreen: React.FC = () => {
     }
   };
 
+  // Función para crear un nuevo chat
+  const newChat = () => {
+    setMessages([
+      { text: "Hola, ¿en qué puedo ayudarte?", sender_by: "Bot", date: new Date(), state: "received" },
+    ]);
+    setMenuOpen(false); // Cierra el menú después de iniciar un nuevo chat
+  };
+
   return (
     <View style={styles.container}>
       {/* Botón del menú desplegable */}
@@ -67,7 +75,10 @@ const ChatScreen: React.FC = () => {
 
       {/* Menú desplegable */}
       {menuOpen && (
-      <View style={styles.menu}>
+        <View style={styles.menu}>
+          <TouchableOpacity onPress={newChat} style={styles.menuItem}>
+            <Text style={styles.menuItemText}>Nuevo chat</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => router.replace("/welcome")} style={styles.menuItem}>
             <Text style={styles.menuItemText}>Volver al inicio</Text>
           </TouchableOpacity>
@@ -76,8 +87,8 @@ const ChatScreen: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => alert("Seleccionaste Chat 2")} style={styles.menuItem}>
             <Text style={styles.menuItemText}>Chat 2</Text>
-        </TouchableOpacity>
-      </View>
+          </TouchableOpacity>
+        </View>
       )}
 
       <View style={styles.content}>
